@@ -1,84 +1,94 @@
 import { useState, useEffect } from "react";
-import "./App.css";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import { ColDef } from "ag-grid-community";
-
-type Chemical = {
-  id: number;
-  date: string;
-  synthesizer: string;
-  name: string;
-  lot: string;
-  structure: string;
-  category: string;
-  purpose: string;
-  gram: number;
-  sublimationtemp: number;
-  purities: number[];
-  inchikey: string;
-  comment: string;
-};
+import { GridApi, IRowNode } from "ag-grid-community";
+import { Chemical } from "./types/Types";
+import { columnDefs } from "./constants/Constants";
 
 function App() {
   const [chemicals, setChemicals] = useState<Chemical[]>([]);
+  const [gridApi, setGridApi] = useState<GridApi | null>(null);
+  const [isRowSelected, setIsRowSelected] = useState<boolean>(false);
 
   useEffect(() => {
     fetchChemicals();
   }, []);
 
+  useEffect(() => {
+    setIsRowSelected(false);
+  }, [chemicals]);
+
   const fetchChemicals = async () => {
-    try {
-      const response = await fetch("http://localhost:8000/chemicals/");
-      const data = await response.json();
-      console.log(data);
-      setChemicals(data);
-    } catch (error) {
-      console.error("Error fetching chemicals:", error);
+    fetch("http://localhost:8000/chemicals/")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network Response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setChemicals(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching chemicals: ", error);
+      });
+  };
+
+  const handleDeleteSelectedRows = () => {
+    if (gridApi) {
+      const selectedNodes: IRowNode[] | null = gridApi.getSelectedNodes();
+      if (selectedNodes && selectedNodes.length > 0) {
+        const selectedRows: Chemical[] = selectedNodes.map((node) => node.data);
+        const remainingRows: Chemical[] = chemicals.filter(
+          (chem) => !selectedRows.includes(chem)
+        );
+        setChemicals(remainingRows);
+        gridApi.deselectAll();
+      }
     }
   };
 
-  const columnDefs: ColDef[] = [
-    { headerName: "ID", field: "id", editable: true },
-    { headerName: "Date", field: "date", editable: true },
-    { headerName: "Synthesizer", field: "synthesizer", editable: true },
-    { headerName: "Name", field: "name", editable: true },
-    { headerName: "Lot", field: "lot", editable: true },
-    { headerName: "Structure", field: "structure", editable: true },
-    { headerName: "Category", field: "category", editable: true },
-    { headerName: "Purpose", field: "purpose", editable: true },
-    { headerName: "Gram", field: "gram", editable: true },
-    {
-      headerName: "Sublimation Temp",
-      field: "sublimationtemp",
-      editable: true,
-    },
-    {
-      headerName: "Purities",
-      field: "purities",
-      valueGetter: (params: any) => params.data.purities.join(", "),
-      editable: true,
-    },
-    { headerName: "Inchikey", field: "inchikey", editable: true },
-    { headerName: "Comment", field: "comment", editable: true },
-  ];
+  const onSelectionChanged = () => {
+    if (gridApi) {
+      setIsRowSelected(gridApi.getSelectedNodes().length > 0);
+    }
+  };
 
   return (
     <>
       <div
+        className="ag-theme-alpine-dark"
         style={{
           alignItems: "center",
           textAlign: "center",
           justifyContent: "center",
           display: "flex",
           flexDirection: "column",
+          backgroundColor: "#333",
+          gap: "1rem",
         }}
       >
         <h1>Material Table</h1>
+        <p>
+          Rows are editable and also able to be deleted. Select a row by
+          clicking, and edit a row cell value by double clicking the cell!
+        </p>
+        {isRowSelected && (
+          <button
+            style={{ width: "15%", height: "2rem" }}
+            onClick={handleDeleteSelectedRows}
+          >
+            Delete Selected Rows
+          </button>
+        )}
+
         <div
           className="ag-theme-alpine-dark"
-          style={{ height: "100vh", width: "95%" }}
+          style={{
+            height: "100vh",
+            width: "95%",
+          }}
         >
           <AgGridReact
             rowData={chemicals}
@@ -87,6 +97,9 @@ function App() {
             paginationPageSize={20}
             domLayout="autoHeight"
             defaultColDef={{ resizable: true }}
+            onGridReady={(params) => setGridApi(params.api)}
+            rowSelection="multiple"
+            onSelectionChanged={onSelectionChanged}
           />
         </div>
       </div>
