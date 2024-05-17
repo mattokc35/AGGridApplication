@@ -13,6 +13,7 @@ def get_chemicals(request):
     chemicals = []
     for entry in chemical_data:
         chemical = {
+            'id': entry['id'],
             'date': entry['date'],
             'synthesizer': entry['synthesizer'],
             'name': entry['name'],
