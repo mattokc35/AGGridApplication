@@ -13,13 +13,22 @@ I used `TypeScript` to ensure type-safety and reduce compile-time errors, and ch
 ## Screenshots
 
 Application Screenshot
+
 ![App Screenshot](https://github.com/mattokc35/KyuluxAgGridApplication/blob/main/screenshots/app.png)
+
 Edit
+
 ![Edit](https://github.com/mattokc35/KyuluxAgGridApplication/blob/main/screenshots/edit.png)
+
 Filter
+
 ![Filter](https://github.com/mattokc35/KyuluxAgGridApplication/blob/main/screenshots/filter.png)
+
 Delete
+
 ![Delete](https://github.com/mattokc35/KyuluxAgGridApplication/blob/main/screenshots/delete.png)
+
 Sort
+
 ![Sort](https://github.com/mattokc35/KyuluxAgGridApplication/blob/main/screenshots/sort.png)
 
