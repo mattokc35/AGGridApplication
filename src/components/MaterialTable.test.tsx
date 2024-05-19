@@ -55,6 +55,6 @@ describe("MaterialTable Component", () => {
     render(
       <MaterialTable chemicals={mockChemicals} setChemicals={setChemicals} />
     );
-    expect(screen.getAllByRole("row")).toHaveLength(mockChemicals.length + 1); // including header row
+    expect(screen.getAllByRole("row")).toHaveLength(mockChemicals.length + 1);
   });
 });
