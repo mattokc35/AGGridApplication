@@ -6,7 +6,7 @@ I have built this data-rich web application using the following tech stack:
 
 **Backend:** `Django`, `Python`
 
-I used `TypeScript` to ensure type-safety and reduce compile-time errors, and chose `Vite` over Webpack for faster bundling/build times. The frontend is very simple, with a MaterialTable.tsx component which I built that is being rendered inside App.tsx. There is also a component test implemented with `Jest` and `React Testing Library` for the MaterialTable component. I chose to use Functional Components over Class Components for my React components, in order to follow modern frontend development practices.  The backend is also very straighforward, with a simple REST API setup with `Python` and `Django` in order to serve the Chemical data in the json file to the frontend. The API only has one (GET) route, `/chemicals`.
+I used `TypeScript` to ensure type-safety and reduce compile-time errors, and chose `Vite` over Webpack for faster bundling/build times. The frontend is very simple, with a MaterialTable.tsx component which I built that is being rendered inside App.tsx. There is also a component test implemented with `Jest` and `React Testing Library` for the MaterialTable component. I chose to use Functional Components over Class Components for my React components, in order to adhere to modern frontend development standards.  The backend is also very straighforward, with a simple REST API setup with `Python` and `Django` in order to serve the Chemical data in the json file to the frontend. The API only has one (GET) route, `/chemicals`.
 
 
 
