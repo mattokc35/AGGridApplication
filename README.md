@@ -1,4 +1,4 @@
-# Kyulux Take-Home Code Test
+# AG Grid Practice Application
 
 I have built this data-rich web application using the following tech stack:
 
